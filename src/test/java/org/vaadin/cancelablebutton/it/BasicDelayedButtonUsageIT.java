@@ -1,10 +1,10 @@
-package org.vaadin.delayedbutton.it;
+package org.vaadin.cancelablebutton.it;
 
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.NotificationElement;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.vaadin.delayedbutton.BasicDelayedButtonUsageUI;
+import org.vaadin.cancelablebutton.BasicDelayedButtonUsageUI;
 
 /**
  * A simple example that uses TestBench to do a browser level test for a
@@ -23,12 +23,18 @@ public class BasicDelayedButtonUsageIT extends AbstractTestBenchTestCase {
         // Click the only button on in UI
         $(ButtonElement.class).first().click();
 
-        if ($(NotificationElement.class).exists()) {
-            fail("Click should not be possible yet.");
+        // Small delay
+        Thread.sleep(500);
+
+        // Click second time
+        $(ButtonElement.class).first().click();
+
+        if (!"Click me".equals($(ButtonElement.class).first().getCaption())) {
+            fail("Click should have been cancelled.");
         }
 
         // Wait until the delay expires
-        Thread.sleep(6000);
+        Thread.sleep(3000);
         
         // Click again
         $(ButtonElement.class).first().click();

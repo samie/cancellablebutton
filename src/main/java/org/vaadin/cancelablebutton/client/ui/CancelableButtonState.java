@@ -1,9 +1,9 @@
-package org.vaadin.delayedbutton.client.ui;
+package org.vaadin.cancelablebutton.client.ui;
 
 import com.vaadin.shared.ui.button.ButtonState;
 
 
-public class DelayedButtonState extends ButtonState {
+public class CancelableButtonState extends ButtonState {
 
     private static final long serialVersionUID = -2146393822472798222L;
 

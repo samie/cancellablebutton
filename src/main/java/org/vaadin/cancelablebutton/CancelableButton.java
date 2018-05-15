@@ -1,47 +1,43 @@
-package org.vaadin.delayedbutton;
+package org.vaadin.cancelablebutton;
 
-import org.vaadin.delayedbutton.client.ui.DelayedButtonState;
+import org.vaadin.cancelablebutton.client.ui.CancelableButtonState;
 
 import com.vaadin.ui.Button;
 
 /**
- * Button that is delayed for inactive for specified amount of seconds.
- *
- * This forces user to concentrate on the view content before clicking the
- * button.
- *
- * Server side component for the VDelayedButton widget.
+ * Button that can be cancelled by clicking egain within a given delay.
+ **
  */
-public class DelayedButton extends Button {
+public class CancelableButton extends Button {
 
     private static final long serialVersionUID = 8658800951893182452L;
 
     /**
-     * Creates new delayed button with caption. Default delay is 3 seconds.
+     * Creates a new cancellable button with caption. Default delay is 3 seconds.
      *
      * @param caption
      *            the Button caption
      */
-    public DelayedButton(String caption) {
+    public CancelableButton(String caption) {
         super(caption);
         setDelay(3);
     }
 
     /**
-     * Creates new delayed button with caption and delay delay
+     * Creates a new cancellable button with caption and delay delay
      *
      * @param caption
      *            the Button caption
      * @param delaySeconds
      *            Number of seconds as specified for {@link #setDelay(int)}
      */
-    public DelayedButton(String caption, int delaySeconds) {
+    public CancelableButton(String caption, int delaySeconds) {
         super(caption);
         setDelay(delaySeconds);
     }
 
     /**
-     * Creates a new delayed button with delay and click listener.
+     * Creates a new cancellable button with delay and click listener.
      *
      * @param caption
      *            the Button caption.
@@ -50,8 +46,8 @@ public class DelayedButton extends Button {
      * @param listener
      *            the Button click listener.
      */
-    public DelayedButton(String caption, int delaySeconds,
-            ClickListener listener) {
+    public CancelableButton(String caption, int delaySeconds,
+                            ClickListener listener) {
         super(caption, listener);
         setDelay(delaySeconds);
     }
@@ -71,7 +67,7 @@ public class DelayedButton extends Button {
     }
 
     @Override
-    public DelayedButtonState getState() {
-        return (DelayedButtonState) super.getState();
+    public CancelableButtonState getState() {
+        return (CancelableButtonState) super.getState();
     }
 }

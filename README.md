@@ -1,12 +1,9 @@
-[![Build Status](https://travis-ci.org/samie/delayedbutton.svg?branch=master)](https://travis-ci.org/samie/delayedbutton)
+[![Build Status](https://travis-ci.org/samie/cancellablebutton.svg?branch=master)](https://travis-ci.org/samie/cancellablebutton)
 
-[![Vaadin_Directory 3.0.0](https://img.shields.io/badge/Vaadin_Directory-3.0.0-blue.svg)](https://vaadin.com/addon/delayedbutton)
+# CancellableButton add-on for Vaadin
 
-# DelayedButton add-on for Vaadin
+DelayedButton implements a Button that can be cancelled within a given delay. Until then a count down caption is presented to user.
 
-DelayedButton implements a Button that becomes active only after given delay. Until then a count down caption is presented to user. See demo at [sami.app.fi/delayedbutton/](http://sami.app.fi/delayedbutton/).
-
-Available for Vaadin in the [add-on Diretory](https://vaadin.com/addon/delayedbutton)
 
 ## Development instructions 
 

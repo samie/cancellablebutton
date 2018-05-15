@@ -1,16 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.vaadin.addons</groupId>
-    <artifactId>delayedbutton</artifactId>
-    <name>DelayedButton</name>
+    <artifactId>cancelablebutton</artifactId>
+    <name>CancelableButton</name>
     <version>3.0.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <organization>
-        <name>Vaadin Community</name>
+        <name>Sami Ekblad</name>
     </organization>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>8.0.0</vaadin.version>
+        <vaadin.version>8.4.1</vaadin.version>
         <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
         <!-- ZIP Manifest fields -->
         <Implementation-Version>${project.version}</Implementation-Version>
@@ -23,14 +23,14 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <scm>
-        <url>git://github.com/samie/delayedbutton.git</url>
-        <connection>scm:git:git://github.com/samie/delayedbutton.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:/samie/delayedbutton.git</developerConnection>
+        <url>git://github.com/samie/cancelablebutton.git</url>
+        <connection>scm:git:git://github.com/samie/cancelablebutton.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:/samie/cancelablebutton.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/samie/delayedbutton/issues</url>
+        <url>https://github.com/samie/cancelablebutton/issues</url>
     </issueManagement>
     <licenses>
         <license>
@@ -141,7 +141,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>org.vaadin.delayedbutton.*</Export-Package>
+                        <Export-Package>org.vaadin.cancelablebutton.*</Export-Package>
                     </instructions>
                 </configuration>
                 <executions>
@@ -178,7 +178,7 @@
                             <!-- Package format version - do not change -->
                             <Vaadin-Package-Version>1</Vaadin-Package-Version>
                             <Vaadin-License-Title>${Vaadin-License-Title}</Vaadin-License-Title>
-                            <Vaadin-Widgetsets>org.vaadin.delayedbutton.DelayedbuttonWidgetset</Vaadin-Widgetsets>
+                            <Vaadin-Widgetsets>org.vaadin.cancelablebutton.DelayedbuttonWidgetset</Vaadin-Widgetsets>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -203,7 +203,7 @@
                     <runTarget>http://localhost:9998/</runTarget>
                     <draftCompile>true</draftCompile>
                     <style>PRETTY</style>
-                    <module>org.vaadin.delayedbutton.DelayedbuttonWidgetset</module>
+                    <module>org.vaadin.cancelablebutton.DelayedbuttonWidgetset</module>
                     <!-- If you do lots of e.g. plain css changes and don't wish to use 
                     hosted mode, you can force compile easily with uncommenting following rule -->
                     <!-- <force>true</force> -->

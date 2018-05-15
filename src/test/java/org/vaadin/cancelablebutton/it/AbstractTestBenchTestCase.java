@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.vaadin.delayedbutton.it;
+package org.vaadin.cancelablebutton.it;
 
 import com.machinepublishers.jbrowserdriver.JBrowserDriver;
 import com.machinepublishers.jbrowserdriver.RequestHeaders;

@@ -1,4 +1,4 @@
-package org.vaadin.delayedbutton;
+package org.vaadin.cancelablebutton;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification;
@@ -13,7 +13,7 @@ public class BasicDelayedButtonUsageUI extends AbstractTest {
 
     @Override
     public Component getTestComponent() {
-        DelayedButton btn = new DelayedButton("Click me", 5);
+        CancelableButton btn = new CancelableButton("Click me", 2);
         btn.addClickListener(e -> {
             Notification.show("Click ok");
         });

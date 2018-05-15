@@ -1,4 +1,4 @@
-package org.vaadin.delayedbutton.uiserver;
+package org.vaadin.cancelablebutton.uiserver;
 
 import org.vaadin.addonhelpers.TServer;
 
