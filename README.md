@@ -2,7 +2,7 @@
 
 # CancellableButton add-on for Vaadin
 
-DelayedButton implements a Button that can be cancelled within a given delay. Until then a count down caption is presented to user.
+CancellableButton implements a Button that can be cancelled within a given delay. Until then a count down caption is presented to user.
 
 
 ## Development instructions 
