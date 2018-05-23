@@ -1,5 +1,6 @@
 package org.vaadin.cancelablebutton;
 
+import com.vaadin.shared.MouseEventDetails;
 import org.vaadin.cancelablebutton.client.ui.CancelableButtonState;
 
 import com.vaadin.ui.Button;
@@ -21,6 +22,14 @@ public class CancelableButton extends Button {
     public CancelableButton(String caption) {
         super(caption);
         setDelay(3);
+    }
+
+
+    @Override
+    public void fireClick(MouseEventDetails mouseEventDetails) {
+        // Clear delayed click state to allow delayed clicking again.
+        getState(true).clickWithDelay = false;
+        super.fireClick(mouseEventDetails);
     }
 
     /**
@@ -53,8 +62,7 @@ public class CancelableButton extends Button {
     }
 
     /**
-     * Set delay in seconds after which the button is enabled. Makes the button
-     * inactive but does not affect the enabled-property.
+     * Set delay in seconds after which the button is enabled.
      *
      * @param seconds
      *            Number of seconds. Zero or negative number disables the
@@ -62,12 +70,41 @@ public class CancelableButton extends Button {
      * @see #setEnabled(boolean) 
      */
     public void setDelay(int seconds) {
-        getState().setDelay(seconds > 0 ? seconds : 0);
-        requestRepaint();
+        getState(true).setDelay(seconds > 0 ? seconds : 0);
+    }
+
+    /**
+     * Click button using the given delay timeout to cancel the click.
+     *
+     * @param seconds
+     *            Number of seconds. Zero or negative number disables the
+     *            behaviour.
+     * @see #setDelay(int)
+     * @see #clickWithDelay()
+     *
+     */
+    public void clickWithDelay(int seconds) {
+        setDelay(seconds);
+        clickWithDelay();
+    }
+
+
+    /**
+     * Click button using the set delay timeout to cancel the click.
+     *
+     * @see #setDelay(int)
+     * @see #clickWithDelay(int)
+     */
+    public void clickWithDelay() {
+        getState(true).clickWithDelay = true;
     }
 
     @Override
     public CancelableButtonState getState() {
         return (CancelableButtonState) super.getState();
+    }
+    @Override
+    public CancelableButtonState getState(boolean markAsDirty) {
+        return (CancelableButtonState) super.getState(markAsDirty);
     }
 }

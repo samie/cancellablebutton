@@ -4,17 +4,18 @@ import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.NotificationElement;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.vaadin.cancelablebutton.BasicDelayedButtonUsageUI;
+
+import org.vaadin.cancelablebutton.BasicCancellableButtonUsageUI;
 
 /**
  * A simple example that uses TestBench to do a browser level test for a
- * BasicDelayedButtonUsageUI. For more complex tests, consider using page object
+ * BasicCancellableButtonUsageUI. For more complex tests, consider using page object
  * pattern.
  */
-public class BasicDelayedButtonUsageIT extends AbstractTestBenchTestCase {
+public class BasicCancellableButtonUsageIT extends AbstractTestBenchTestCase {
 
-    public BasicDelayedButtonUsageIT() {
-        super(BasicDelayedButtonUsageUI.class);
+    public BasicCancellableButtonUsageIT() {
+        super(BasicCancellableButtonUsageUI.class);
     }
     
     @Test

@@ -23,11 +23,27 @@ public class CancelableButtonConnector extends ButtonConnector {
     @Override
     public void onStateChanged(StateChangeEvent stateChangeEvent) {
         super.onStateChanged(stateChangeEvent);
+        if (getState().clickWithDelay) {
+            // Clear state
+            getState().clickWithDelay = false;
+            clickWithDelay();
+        }
     }
 
     @Override
     public CancelableButtonState getState() {
         return (CancelableButtonState) super.getState();
+    }
+
+
+
+    /** Click with delay */
+    public void clickWithDelay() {
+
+            // Create dummy event
+            ClickEvent e = new ClickEvent() {
+            };
+            this.onClick(e);
     }
 
     @Override
@@ -42,9 +58,26 @@ public class CancelableButtonConnector extends ButtonConnector {
 
             endDelay();
 
+        } else if (getState().getDelay() <= 0){
+            // If no delay, just click right away
+            if (event.getSource() == null) {
+                MouseEventDetails details = new MouseEventDetails();
+                details.setButton(MouseEventDetails.MouseButton.LEFT);
+                ((ButtonServerRpc)this.getRpcProxy(ButtonServerRpc.class)).click(details);
+            } else {
+                ((ButtonServerRpc)this.getRpcProxy(ButtonServerRpc.class)).click(pendingMouseDetails);
+            }
+
         } else {
             pendingClickEvent = event;
-            pendingMouseDetails = MouseEventDetailsBuilder.buildMouseEventDetails(event.getNativeEvent(), this.getWidget().getElement());
+            if (event.getSource() == null) {
+                // Create dummy mouse details
+                pendingMouseDetails = new MouseEventDetails();
+                pendingMouseDetails.setButton(MouseEventDetails.MouseButton.LEFT);
+            } else {
+                // Use the original mouse details
+                pendingMouseDetails = MouseEventDetailsBuilder.buildMouseEventDetails(event.getNativeEvent(), this.getWidget().getElement());
+            }
 
             //Start timer
             setDelay(getState().getDelay());
