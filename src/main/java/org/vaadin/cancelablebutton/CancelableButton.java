@@ -4,6 +4,7 @@ import com.vaadin.shared.MouseEventDetails;
 import org.vaadin.cancelablebutton.client.ui.CancelableButtonState;
 
 import com.vaadin.ui.Button;
+import org.vaadin.cancelablebutton.client.ui.CancellableButtonClientRpc;
 
 /**
  * Button that can be cancelled by clicking egain within a given delay.
@@ -22,14 +23,6 @@ public class CancelableButton extends Button {
     public CancelableButton(String caption) {
         super(caption);
         setDelay(3);
-    }
-
-
-    @Override
-    public void fireClick(MouseEventDetails mouseEventDetails) {
-        // Clear delayed click state to allow delayed clicking again.
-        getState(true).clickWithDelay = false;
-        super.fireClick(mouseEventDetails);
     }
 
     /**
@@ -70,7 +63,7 @@ public class CancelableButton extends Button {
      * @see #setEnabled(boolean) 
      */
     public void setDelay(int seconds) {
-        getState(true).setDelay(seconds > 0 ? seconds : 0);
+        getState(true).delay = seconds > 0 ? seconds : 0;
     }
 
     /**
@@ -96,7 +89,7 @@ public class CancelableButton extends Button {
      * @see #clickWithDelay(int)
      */
     public void clickWithDelay() {
-        getState(true).clickWithDelay = true;
+        getRpcProxy(CancellableButtonClientRpc.class).clickWithDelay();
     }
 
     @Override
@@ -108,6 +101,13 @@ public class CancelableButton extends Button {
         return (CancelableButtonState) super.getState(markAsDirty);
     }
 
+    public void cancelClick() {
+        getRpcProxy(CancellableButtonClientRpc.class).cancelClick();
+    }
+
+    public void restartTimer() {
+        getRpcProxy(CancellableButtonClientRpc.class).restartTimer();
+    }
 
     public void setClickConfirms(boolean confirmOnClick) {
         getState(true).clickConfirms = confirmOnClick;
@@ -116,5 +116,6 @@ public class CancelableButton extends Button {
     public boolean getClickConfirms() {
         return getState(false).clickConfirms;
     }
+
 
 }

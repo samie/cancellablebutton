@@ -21,12 +21,14 @@ public class BasicCancellableButtonUsageUI extends AbstractTest {
         btn.addClickListener(e -> {
             Notification.show("Click ok");
         });
-        btn.setClickConfirms(true);
+        btn.setClickConfirms(false);
 
         Button start = new Button("Start 3s delay", e -> {btn.clickWithDelay(3);});
         Button start2 = new Button("Start 0s delay", e -> {btn.clickWithDelay(0);});
+        Button stop = new Button("Stop", e -> {btn.cancelClick();});
+        Button restart = new Button("Restart", e -> {btn.restartTimer();});
 
-        l.addComponents(btn,start, start2);
+        l.addComponents(btn,start, start2, stop, restart);
 
         return l;
     }

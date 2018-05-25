@@ -15,19 +15,37 @@ import com.vaadin.shared.ui.Connect;
 public class CancelableButtonConnector extends ButtonConnector {
 
     private static final long serialVersionUID = 3008795499402562824L;
-    private ClickEvent pendingClickEvent;
     private Timer timer;
     private int currentTime;
     private MouseEventDetails pendingMouseDetails;
 
     @Override
+    public void init() {
+        super.init();
+        registerRpc(CancellableButtonClientRpc.class, new CancellableButtonClientRpc() {
+            @Override
+            public void clickWithDelay() {
+                resetTimer();
+                resetCaption();
+                dummyClick();
+            }
+            @Override
+            public void restartTimer() {
+                startTimer(getState().delay);
+            }
+
+            @Override
+            public void cancelClick() {
+                resetCaption();
+                resetTimer();
+            }
+
+        });
+    }
+
+    @Override
     public void onStateChanged(StateChangeEvent stateChangeEvent) {
         super.onStateChanged(stateChangeEvent);
-        if (getState().clickWithDelay) {
-            // Clear state
-            getState().clickWithDelay = false;
-            clickWithDelay();
-        }
     }
 
     @Override
@@ -35,10 +53,7 @@ public class CancelableButtonConnector extends ButtonConnector {
         return (CancelableButtonState) super.getState();
     }
 
-
-
-    /** Click with delay */
-    public void clickWithDelay() {
+    private void dummyClick() {
 
             // Create dummy event
             ClickEvent e = new ClickEvent() {
@@ -46,60 +61,93 @@ public class CancelableButtonConnector extends ButtonConnector {
             this.onClick(e);
     }
 
+
     @Override
     public void onClick(ClickEvent event) {
 
-        if (pendingClickEvent != null) {
-            pendingClickEvent = null;
+        if (pendingMouseDetails != null) {
 
-            // Cancel previous timer
-            if (timer != null) {
-                timer.cancel();
-            }
-
-            endDelay();
-
-            // if click confirms we just pass that through
             if (getState().clickConfirms) {
-                super.onClick(event);
-            }
-
-
-        } else if (getState().getDelay() <= 0){
-            // If no delay specified, just click right away
-            super.onClick(event);
-        } else {
-            pendingClickEvent = event;
-            if (event.getSource() == null) {
-                // Create dummy mouse details
-                pendingMouseDetails = new MouseEventDetails();
-                pendingMouseDetails.setButton(MouseEventDetails.MouseButton.LEFT);
+                // If we click does not cancel (i.e. confirms) we just send the click
+                pendingMouseDetails = null;
+                resetTimer();
+                resetCaption();
+                sendClickRpc(buildMouseEventDetails(event));
             } else {
-                // Use the original mouse details
-                pendingMouseDetails = MouseEventDetailsBuilder.buildMouseEventDetails(event.getNativeEvent(), this.getWidget().getElement());
+                // Cancel the pending click
+                resetCaption();
+                resetTimer();
+                return;
             }
 
-            //Start timer
-            setDelay(getState().getDelay());
+        } else {
+            // Click to start new timer. Store mouse details.
+            pendingMouseDetails = buildMouseEventDetails(event);
+
+            if (getState().delay <= 0) {
+                // If no delay specified, just click right away
+                resetCaption();
+                sendClickRpc(pendingMouseDetails);
+            } else {
+                //Start timer
+                startTimer(getState().delay);
+            }
         }
     }
 
-    protected void endDelay() {
+    /** Extract mouse details from a real event or generate one from dummy event. */
+    private MouseEventDetails buildMouseEventDetails(ClickEvent event) {
+        MouseEventDetails d;
+        if (event.getSource() == null) {
+            // Create dummy mouse details
+            d = new MouseEventDetails();
+            d.setButton(MouseEventDetails.MouseButton.LEFT);
+        } else {
+            // Use the original mouse details
+            d = MouseEventDetailsBuilder.buildMouseEventDetails(event.getNativeEvent(), this.getWidget().getElement());
+        }
+        return d;
+    }
+
+    /** Reset caption to the original state. */
+    protected void resetCaption() {
         getWidget().setHtml(getState().caption);
+    }
 
-        if (pendingClickEvent != null) {
-            ClickEvent c = pendingClickEvent;
-            pendingClickEvent = null;
-            ((ButtonServerRpc)this.getRpcProxy(ButtonServerRpc.class)).click(pendingMouseDetails);
+    /** Send pending click, if present. */
+    private void sendPendingClick() {
+        if (pendingMouseDetails != null) {
+            MouseEventDetails d = pendingMouseDetails;
+            pendingMouseDetails = null;
+            sendClickRpc(d);
         }
     }
 
+
+    /** Utility to send the event to server. */
+    private void sendClickRpc(MouseEventDetails d) {
+        ((ButtonServerRpc)this.getRpcProxy(ButtonServerRpc.class)).click(d);
+
+    }
+
+
+    /** Update caption based on current timer. */
     private void updateCaption() {
         int c = currentTime / 1000;
         getWidget().setHtml(getState().caption + " (" + c + ")");
     }
 
-    public void setDelay(int delay) {
+    /** Reset timer for any pending click. */
+    private void resetTimer() {
+        pendingMouseDetails = null;
+        if (timer != null) {
+            timer.cancel();
+        }
+        timer = null;
+    }
+
+    /** Start timer with given delay. */
+    private void startTimer(int delay) {
 
         if (delay > 0) {
             currentTime = delay * 1000;
@@ -112,10 +160,12 @@ public class CancelableButtonConnector extends ButtonConnector {
         if (timer != null) {
             timer.cancel();
         }
+        timer = null;
 
         // If no delay is given stop here
         if (delay <= 0) {
-            endDelay();
+            resetCaption();
+            sendPendingClick();
             return;
         }
 
@@ -127,8 +177,9 @@ public class CancelableButtonConnector extends ButtonConnector {
                 if (currentTime > 0) {
                     updateCaption();
                 } else {
-                    cancel();
-                    endDelay();
+                    this.cancel();
+                    resetCaption();
+                    sendPendingClick();
                 }
             }
         };
