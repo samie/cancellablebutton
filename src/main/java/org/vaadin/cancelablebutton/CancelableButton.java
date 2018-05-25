@@ -107,4 +107,14 @@ public class CancelableButton extends Button {
     public CancelableButtonState getState(boolean markAsDirty) {
         return (CancelableButtonState) super.getState(markAsDirty);
     }
+
+
+    public void setClickConfirms(boolean confirmOnClick) {
+        getState(true).clickConfirms = confirmOnClick;
+    }
+
+    public boolean getClickConfirms() {
+        return getState(false).clickConfirms;
+    }
+
 }

@@ -21,6 +21,7 @@ public class BasicCancellableButtonUsageUI extends AbstractTest {
         btn.addClickListener(e -> {
             Notification.show("Click ok");
         });
+        btn.setClickConfirms(true);
 
         Button start = new Button("Start 3s delay", e -> {btn.clickWithDelay(3);});
         Button start2 = new Button("Start 0s delay", e -> {btn.clickWithDelay(0);});

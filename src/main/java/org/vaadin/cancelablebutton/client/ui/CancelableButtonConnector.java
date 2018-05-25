@@ -48,6 +48,7 @@ public class CancelableButtonConnector extends ButtonConnector {
 
     @Override
     public void onClick(ClickEvent event) {
+
         if (pendingClickEvent != null) {
             pendingClickEvent = null;
 
@@ -58,16 +59,15 @@ public class CancelableButtonConnector extends ButtonConnector {
 
             endDelay();
 
-        } else if (getState().getDelay() <= 0){
-            // If no delay, just click right away
-            if (event.getSource() == null) {
-                MouseEventDetails details = new MouseEventDetails();
-                details.setButton(MouseEventDetails.MouseButton.LEFT);
-                ((ButtonServerRpc)this.getRpcProxy(ButtonServerRpc.class)).click(details);
-            } else {
-                ((ButtonServerRpc)this.getRpcProxy(ButtonServerRpc.class)).click(pendingMouseDetails);
+            // if click confirms we just pass that through
+            if (getState().clickConfirms) {
+                super.onClick(event);
             }
 
+
+        } else if (getState().getDelay() <= 0){
+            // If no delay specified, just click right away
+            super.onClick(event);
         } else {
             pendingClickEvent = event;
             if (event.getSource() == null) {
@@ -115,6 +115,7 @@ public class CancelableButtonConnector extends ButtonConnector {
 
         // If no delay is given stop here
         if (delay <= 0) {
+            endDelay();
             return;
         }
 
